@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Danh sách các tệp .enc trong thư mục temp</title>
+</head>
+<body>
+    <h1>Danh sách các tệp .enc trong thư mục temp:</h1>
+    <ul>
+        {% for file in files %}
+            <li><a href="#" onclick="downloadEncryptedFile('{{ file }}')">Tải xuống {{ file }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function downloadEncryptedFile(filename) {
+            var secret_key_rev_N = prompt("Nhập khoá bí mật N ( PrivateKey có định dạng (N,e)): ");
+            var secret_key_rev_E = prompt("Nhập khoá bí mật E ( PrivateKey có định dạng (N,e)): ");
+            if (secret_key_rev_N) {
+                // Thêm tham số secret_key vào URL
+                var downloadLink = '/temp/' + filename + '?secret_key_rev_N=' + encodeURIComponent(secret_key_rev_N)+'&secret_key_rev_E='+encodeURIComponent(secret_key_rev_E);
+
+                // Tạo một phần tử <a> để tải xuống file
+                var linkElement = document.createElement('a');
+                linkElement.href = downloadLink;
+                linkElement.setAttribute('download', '');
+                
+                // Thêm phần tử vào body và kích hoạt sự kiện click
+                document.body.appendChild(linkElement);
+                linkElement.click();
+                
+                // Xóa phần tử sau khi tải xuống hoàn tất
+                document.body.removeChild(linkElement);
+            }
+        }
+    </script>
+</body>
+</html>

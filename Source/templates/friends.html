@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <link href="/static/bootstrap.min.css" rel="stylesheet"></head>
+    <body>
+        {% for friend in friends %}
+          {% if friend.user.id != session['user_id'] %}
+
+          <form id="countForm{{friend.user.id}}" class="countForm" hx-post="/check-count" hx-trigger="load, click" hx-target="#count-result{{friend.user.id}}">
+              <input id="count" name="count" type="hidden" value="{{friend.user.id}}" >
+          </form>
+            <!-- start message -->
+            <div class="list-group-item list-group-item-action hans getFriendMessage hana{{friend.user.id}} {% if friend.user.id == session['friend_id'] %} active {% endif %}" style="cursor: pointer;" id="message-{{friend.user.id}}">
+              <div class="row">
+                <div class="col-lg-2">
+                  <div class="d-flex w-100 align-items-center justify-content-between">
+                  <span class="chat-profile-div"><img src="{{ friend.user.image | user_image }}" class="chat-profile-icon" draggable="false"></span>
+                  </div>
+                </div>
+                <div class="col-lg-10">
+                  <div class="d-flex w-100 align-items-center justify-content-between pe-2 pt-1">
+                      <span class="profile-name">{{ friend.user.name }}</span>
+                      <small class="profile-date dateof{{friend.user.id}} {% if friend.user.id != session['friend_id'] %} text-muted {% endif %}">{{friend.date.strftime('%Y-%m-%d')}}</small>
+                  </div>
+                  <div class="d-flex w-100 align-items-center justify-content-between pe-2">
+                    <div class="inpm">{% if friend.message %} {{friend.message}} {% endif %}</div>
+                    <div class="capol" id="count-result{{friend.user.id}}"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End messages -->
+            {% endif %}
+          {% endfor %}
+
+
+  <script src="/static/main.js"></script>
+    </body>
+</html>
